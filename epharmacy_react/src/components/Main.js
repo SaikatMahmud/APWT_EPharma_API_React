@@ -5,6 +5,7 @@ import AboutUs from "./AboutUs";
 import Home from "./customer/Home";
 import Login from "./Login";
 import ContactUs from "./ContactUs";
+import SearchResult from "./customer/SearchResult";
 
 const Main = () => {
     return (
@@ -19,6 +20,7 @@ const Main = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/aboutUs" element={<AboutUs />} />
                     <Route path="/contactUs" element={<ContactUs />} />
+                    <Route path="/search" element={<SearchResult />} />
 
 
                 </Routes>

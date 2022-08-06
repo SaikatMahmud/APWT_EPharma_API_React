@@ -19,13 +19,14 @@ class MedicineController extends Controller
         if ($validator->fails()){
             return response()->json($validator->errors(),422);
         }
-        // $keyword = $rq->search;
-        // $res = EPMedicine::where('medicine_name', 'LIKE', "%{$keyword}%")->orWhere('genre','like',"%{$keyword}%");
-        //->paginate(3)->withQueryString();
+        $keyword = $rq->search;
+        $res = EPMedicine::where('medicine_name', 'LIKE', "%{$keyword}%")->orWhere('genre','like',"%{$keyword}%")
+        ->paginate(3)->withQueryString();
         // $ress=$res->toQuery()->paginate(3);
         //$res = EPMedicine::paginate(2);
        // return view('customer.search')->with('results', $res);
-       return response()->json(["msg"=>"you have inserted"]);
+    //    return response()->json(["msg"=>"you have inserted"]);
+       return response()->json($res);
 
     }
 
