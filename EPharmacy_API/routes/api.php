@@ -36,7 +36,7 @@ Route::post('/registration',[CustomerController::class,'regSubmit'])->name('cus.
 Route::get('/profile',[CustomerController::class,'profile'])->name('cus.profile'); //edit or view profile
 Route::post('/profile',[CustomerController::class,'editProfile'])->name('cus.profile.edit'); //save the edit after click 'save'
 
-Route::get('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
+Route::post('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
 Route::get('/details/med/id={id}',[MedicineController::class,'details'])->name('med.details'); //show medicine full details
 Route::post('/add-to-cart',[CartController::class,'addtocart'])->name('cus.addtocart'); //from search result/detials page
 

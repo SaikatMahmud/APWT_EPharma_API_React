@@ -21,6 +21,7 @@ const Main = () => {
                     <Route path="/aboutUs" element={<AboutUs />} />
                     <Route path="/contactUs" element={<ContactUs />} />
                     <Route path="/search" element={<SearchResult />} />
+                    {/* <Route path="/search" render={(props) => <SearchResult {...props}/>}/> */}
 
 
                 </Routes>
