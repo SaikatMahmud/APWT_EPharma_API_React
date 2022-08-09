@@ -15,6 +15,7 @@ const Reg=()=>{
             debugger;
             localStorage.setItem('_authToken',succ.data.token_key);
             localStorage.setItem('_authUserId',succ.data.user_id);
+            
         },(err)=>{
            debugger;
             setErrs(err.response.data);

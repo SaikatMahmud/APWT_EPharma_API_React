@@ -28,10 +28,12 @@ class CustomerController extends Controller
         return view('customer.reg'); //done
     }
 
-    public function profile()
+    public function profile(Request $rq)
     {
-        $cus = EPCustomer::where('customer_id', (session()->get('loggedCustomer')->customer_id))->first();
-        return view('customer.profile')->with('cus', $cus);
+      //  $cus = EPCustomer::where('customer_id', (session()->get('loggedCustomer')->customer_id))->first();
+        $cus = EPCustomer::where('customer_id',$rq->header("UserID"))->first();
+        return response()->json($cus);
+        //return view('customer.profile')->with('cus', $cus);
     }
     public function cart()
     {
@@ -46,12 +48,13 @@ class CustomerController extends Controller
 
     public function editProfile(Request $rq)
     {
-        $rq->validate(
+        $validator= Validator::make($rq->all(),
             [
                 "name" => "required",
                 "email" => "required|regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
                 "email" => "unique:customers,customer_email," . session()->get('loggedCustomer')->customer_id . ",customer_id",
                 "mobile" => "required",
+                "address"=>"required",
                 "cus_pic" => "mimes:jpg,png,jpeg"
 
                 // "password" => "required|min:4", //|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}+$/",
@@ -62,6 +65,9 @@ class CustomerController extends Controller
                 //"confirmPass.same" => "Both passsword not matched"
             ]
         );
+        if ($validator->fails()){
+            return response()->json($validator->errors(),422);
+        }
 
         if ($rq->hasFile('cus_pic')) {
             $image_name = "";
@@ -69,7 +75,7 @@ class CustomerController extends Controller
                 . "." . $rq->file('cus_pic')->getClientOriginalExtension();
             File::delete('public' . '/' . session()->get('loggedCustomer')->pro_pic);
             $rq->file('cus_pic')->storeAs('public/cus_pic', $image_name);
-            EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->update(
+            EPCustomer::where('customer_id', $rq->header("UserID"))->update(
                 [
                     'customer_name' => $rq->name,
                     'customer_email' => $rq->email,
@@ -80,7 +86,7 @@ class CustomerController extends Controller
             );
         } 
         else {
-            EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->update(
+            EPCustomer::where('customer_id',$rq->header("UserID"))->update(
                 [
                     'customer_name' => $rq->name,
                     'customer_email' => $rq->email,
@@ -88,13 +94,15 @@ class CustomerController extends Controller
                     'customer_add' => $rq->address //there is no file
                 ]
             );
+            $cus = EPCustomer::where('customer_id',$rq->header("UserID"))->first();
+            return response()->json($cus);
         }
         // getting new session after profile edit
-        $cus = EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->first();
-        session()->forget('loggedCustomer');
-        session()->put('loggedCustomer', $cus);
-        session()->flash('msg', 'Edit saved');
-        return back();
+        // $cus = EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->first();
+        // session()->forget('loggedCustomer');
+        // session()->put('loggedCustomer', $cus);
+        // session()->flash('msg', 'Edit saved');
+        // return back();
     }
 
     public function regSubmit(Request $rq)

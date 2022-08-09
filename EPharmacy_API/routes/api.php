@@ -33,10 +33,10 @@ Route::get('/logout',[LoginController::class,'logout'])->name('user.logout');
 Route::get('/registration',[CustomerController::class,'reg'])->name('cus.reg');
 Route::post('/registration',[CustomerController::class,'regSubmit'])->name('cus.reg.submit');
 
-Route::get('/profile',[CustomerController::class,'profile'])->name('cus.profile'); //edit or view profile
-Route::post('/profile',[CustomerController::class,'editProfile'])->name('cus.profile.edit'); //save the edit after click 'save'
+Route::get('/profile',[CustomerController::class,'profile'])->name('cus.profile')->middleware('verify.api'); //edit or view profile
+Route::post('/profile',[CustomerController::class,'editProfile'])->name('cus.profile.edit')->middleware('verify.api'); //save the edit after click 'save'
 
-Route::post('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
+Route::get('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
 Route::get('/details/med/id={id}',[MedicineController::class,'details'])->name('med.details'); //show medicine full details
 Route::post('/add-to-cart',[CartController::class,'addtocart'])->name('cus.addtocart'); //from search result/detials page
 

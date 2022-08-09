@@ -20,7 +20,7 @@ class verifyRequestAPI
         $tkey = $request->header("Authorization");
         $user_id = $request->header("UserID");
         if($tkey !=null && $user_id !=null){
-            $token = EPToken::where('tkey',$tkey)
+            $token = EPToken::where('token_key',$tkey)
                     ->where('user_id',$user_id)
                      ->whereNull('expired_at')
                      ->first();
