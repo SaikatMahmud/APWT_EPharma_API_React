@@ -16,6 +16,10 @@ const EditProfile = () => {
         axiosConfig.get("/profile").then((rsp) => {
             debugger
             setResult(rsp.data);
+            setName(rsp.data.customer_name);
+            setEmail(rsp.data.customer_email);
+            setMobile(rsp.data.customer_mob);
+            setAdd(rsp.data.customer_add);
             // console.log(rsp.data);
         }, (err) => {
             debugger
@@ -42,11 +46,11 @@ const EditProfile = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                Name: <input defaultValue={result.customer_name} onChange={(e) => { setName(e.target.value) }} type="text" /><span>{errs.name ? errs.name[0] : ''}</span><br />
-                Email: <input defaultValue={result.customer_email} onChange={(e) => { setEmail(e.target.value) }} type="text" /><span>{errs.email ? errs.email[0] : ''}</span><br />
-                Mobile: <input defaultValue={result.customer_mob} onChange={(e) => { setMobile(e.target.value) }} type="text" /><span>{errs.mobile ? errs.mobile[0] : ''}</span><br />
-                Address: <input defaultValue={result.customer_add} onChange={(e) => { setAdd(e.target.value) }} type="text" /><span>{errs.mobile ? errs.mobile[0] : ''}</span><br />
-                <input type="submit" value="Create"/> 
+                Name: <input defaultValue={name} onChange={(e) => { setName(e.target.value) }} type="text" /><span>{errs.name ? errs.name[0] : ''}</span><br />
+                Email: <input defaultValue={email} onChange={(e) => { setEmail(e.target.value) }} type="text" /><span>{errs.email ? errs.email[0] : ''}</span><br />
+                Mobile: <input defaultValue={mobile} onChange={(e) => { setMobile(e.target.value) }} type="text" /><span>{errs.mobile ? errs.mobile[0] : ''}</span><br />
+                Address: <input defaultValue={address} onChange={(e) => { setAdd(e.target.value) }} type="text" /><span>{errs.address ? errs.address[0] : ''}</span><br />
+                <input type="submit" value="Save" />
             </form>
         </div>
     )

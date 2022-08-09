@@ -1,5 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosConfig from "../axiosConfig";
+import { useNavigate } from "react-router-dom";
+
 
 const Reg=()=>{
     const [name,setName] = useState("");
@@ -9,10 +11,12 @@ const Reg=()=>{
     const [confirmPass,setConfirmPass] = useState("");
     const [errs,setErrs] = useState({});
     const [msg,setMsg] = useState("");
+    const navigate = useNavigate();
+
     const handleSubmit=(event)=>{
         event.preventDefault();
         const data={name:name,email:email,mobile:mobile,password:password,confirmPass:confirmPass};
-        axios.post("http://localhost:8000/api/registration",data).
+        axiosConfig.post("/registration",data).
         then((succ)=>{
             //setMsg(succ.data.msg);
             //window.location.href="/list";

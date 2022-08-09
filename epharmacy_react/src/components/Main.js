@@ -11,19 +11,33 @@ import Cart from "./customer/Cart";
 import Orders from "./customer/Orders";
 import EditProfile from "./customer/EditProfile";
 import Logout from "./customer/Logout";
-
+import { useState, useEffect } from "react";
 const Main = () => {
+    const [logIn, setLogIn] = useState(false);
+    // const check=()=>{
+    //     if (localStorage.getItem('_authToken')) {
+    //         setLogIn(true);
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (localStorage.getItem('_authToken')) {
+    //         setLogIn(true);
+    //     }
+    // }, []);
+
+
+
     return (
         <div>
             <BrowserRouter>
-                {/* if ( ${localStorage.getItem('_authToken')}) {
-                <AfterLogin/>
-            }
-            else{
-                <BeforeLogin/>
-            } */}
-                <AfterLogin />
-                <BeforeLogin />
+          
+                {
+                    localStorage.getItem('_authToken') != null && <AfterLogin />
+                }
+                {
+                     localStorage.getItem('_authToken') == null && <BeforeLogin />
+                }
+            
 
                 <Routes>
                     <Route path="/registration" element={<Reg />} />

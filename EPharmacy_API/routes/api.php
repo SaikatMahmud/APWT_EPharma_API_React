@@ -41,7 +41,7 @@ Route::get('/details/med/id={id}',[MedicineController::class,'details'])->name('
 Route::post('/add-to-cart',[CartController::class,'addtocart'])->name('cus.addtocart'); //from search result/detials page
 
 
-Route::get('/cart',[CustomerController::class,'cart'])->name('cus.cart'); //view cart
+Route::get('/cart',[CustomerController::class,'cart'])->name('cus.cart')->middleware('verify.api'); //view cart
 Route::get('/cart/remove_med/{id}',[CartController::class,'removeFromCart'])->name('cart.remove'); //remove medicine from cart
 Route::post('/order/confirm',[OrderController::class,'confirmOrder'])->name('confirm.order'); //after clicking placeOrder button in cart page
 Route::post('/order/placed_confirm',[OrderController::class,'confirmPage'])->name('confirm.order.page'); //confirmation msg page
