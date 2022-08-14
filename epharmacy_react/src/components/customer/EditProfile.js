@@ -36,6 +36,7 @@ const EditProfile = () => {
                 //setMsg(succ.data.msg);
                 //window.location.href="/list";
                 debugger;
+                setMsg("Profile updated");
             }, (err) => {
                 //  debugger;
                 setErrs(err.response.data);
@@ -52,6 +53,7 @@ const EditProfile = () => {
                 Address: <input defaultValue={address} onChange={(e) => { setAdd(e.target.value) }} type="text" /><span>{errs.address ? errs.address[0] : ''}</span><br />
                 <input type="submit" value="Save" />
             </form>
+            <h4>{msg}</h4>
         </div>
     )
 }

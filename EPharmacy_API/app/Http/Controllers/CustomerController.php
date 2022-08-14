@@ -30,15 +30,19 @@ class CustomerController extends Controller
 
     public function profile(Request $rq)
     {
-      //  $cus = EPCustomer::where('customer_id', (session()->get('loggedCustomer')->customer_id))->first();
-        $cus = EPCustomer::where('customer_id',$rq->header("UserID"))->first();
+        //  $cus = EPCustomer::where('customer_id', (session()->get('loggedCustomer')->customer_id))->first();
+        $cus = EPCustomer::where('customer_id', $rq->header("UserID"))->first();
         return response()->json($cus);
         //return view('customer.profile')->with('cus', $cus);
     }
     public function cart(Request $rq)
     {
-        $cart = EPCart::where('customer_id',$rq->header("UserID"))->get();
-        return response()->json($cart);
+        $carts = EPCart::where('customer_id', $rq->header("UserID"))->get();
+        foreach ($carts as $key => $cart) {
+            //$med[]= $cart->where('cart_id', $cart->cart_id)->first()->Medicines;
+            $cart->Medicines;
+        }
+        return response()->json($carts);
 
         // return view('customer.cart')->with('allCart', $cart);
     }
@@ -50,14 +54,15 @@ class CustomerController extends Controller
 
     public function editProfile(Request $rq)
     {
-        $validator= Validator::make($rq->all(),
+        $validator = Validator::make(
+            $rq->all(),
             [
                 "name" => "required",
-                "email"=>"required",
-               // "email" => "required|regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
-               // "email" => "unique:customers,customer_email," .$rq->header("UserID"). ",customer_id",
+                "email" => "required",
+                // "email" => "required|regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
+                // "email" => "unique:customers,customer_email," .$rq->header("UserID"). ",customer_id",
                 "mobile" => "required",
-                "address"=>"required",
+                "address" => "required",
                 // "cus_pic" => "mimes:jpg,png,jpeg"
 
                 // "password" => "required|min:4", //|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}+$/",
@@ -68,8 +73,8 @@ class CustomerController extends Controller
                 //"confirmPass.same" => "Both passsword not matched"
             ]
         );
-        if ($validator->fails()){
-            return response()->json($validator->errors(),422);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
         // if ($rq->hasFile('cus_pic')) {
@@ -88,18 +93,18 @@ class CustomerController extends Controller
         //         ]
         //     );
         // } 
-       // else {
-            EPCustomer::where('customer_id',$rq->header("UserID"))->update(
-                [
-                    'customer_name' => $rq->name,
-                    'customer_email' => $rq->email,
-                    'customer_mob' => $rq->mobile,
-                    'customer_add' => $rq->address //there is no file
-                ]
-            );
-            $cus = EPCustomer::where('customer_id',$rq->header("UserID"))->first();
-            return response()->json($cus);
-       // }
+        // else {
+        EPCustomer::where('customer_id', $rq->header("UserID"))->update(
+            [
+                'customer_name' => $rq->name,
+                'customer_email' => $rq->email,
+                'customer_mob' => $rq->mobile,
+                'customer_add' => $rq->address //there is no file
+            ]
+        );
+        $cus = EPCustomer::where('customer_id', $rq->header("UserID"))->first();
+        return response()->json($cus);
+        // }
         // getting new session after profile edit
         // $cus = EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->first();
         // session()->forget('loggedCustomer');
@@ -110,7 +115,8 @@ class CustomerController extends Controller
 
     public function regSubmit(Request $rq)
     {
-        $validator = Validator::make($rq->all(),
+        $validator = Validator::make(
+            $rq->all(),
             [
                 "name" => "required",
                 "email" => "required|unique:customers,customer_email|regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
@@ -123,8 +129,8 @@ class CustomerController extends Controller
                 "confirmPass.same" => "Both passsword not matched"
             ]
         );
-        if ($validator->fails()){
-            return response()->json($validator->errors(),422);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
         $cus = new EPCustomer();
         $cus->customer_name = $rq->name;
@@ -132,9 +138,8 @@ class CustomerController extends Controller
         $cus->customer_mob = $rq->mobile;
         $cus->password = bcrypt($rq->password);
         $cus->save();
-        if($cus->save()){
-            return response()->json(["msg"=>"reg success"]);
-
+        if ($cus->save()) {
+            return response()->json(["msg" => "reg success"]);
         }
         // if ($cus->save())
         //     session()->flash('regSuccess', 'Registration Success, Login now');

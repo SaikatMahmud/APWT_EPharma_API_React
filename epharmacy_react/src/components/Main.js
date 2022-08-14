@@ -24,21 +24,15 @@ const Main = () => {
     //         setLogIn(true);
     //     }
     // }, []);
-
-
-
     return (
         <div>
             <BrowserRouter>
-          
                 {
                     localStorage.getItem('_authToken') != null && <AfterLogin />
                 }
                 {
                      localStorage.getItem('_authToken') == null && <BeforeLogin />
                 }
-            
-
                 <Routes>
                     <Route path="/registration" element={<Reg />} />
                     <Route path="/" element={<Home />} />

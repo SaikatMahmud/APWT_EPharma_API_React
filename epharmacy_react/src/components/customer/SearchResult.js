@@ -77,21 +77,14 @@ const SearchResult = () => {
     // }
     return (
         <div>
-
-
             <br />
-
             <div align="right">
                 <form onSubmit={handleSubmit}>
                     <input value={search} type="text" placeholder="Search here" onChange={(e) => { setSearch(e.target.value) }}></input>
                     <input type="submit" value="search" /><span> {errs ? errs : ''}</span>
                 </form>
-
             </div>
-
-
             <div>
-                {/* <ul> */}
                 {
                     result.data?.map((med) =>
                         // <li key={st.medicine_id}>{st.medicine_name}</li>
@@ -111,9 +104,6 @@ const SearchResult = () => {
                         </span>
                     )
                 }
-                {/* </ul> */}
-
-
                 <div>
                     <Pagination
                         activePage={result.current_page}
@@ -126,21 +116,7 @@ const SearchResult = () => {
                 {/* <Paginator currPage={result.current_page} lastPage={result.last_page} onChange={this.onCurrPageChange} /> */}
                 {/* <Pagination changePage={this.getData} data={data}/> */}
             </div >
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
         </div>
     )
 
