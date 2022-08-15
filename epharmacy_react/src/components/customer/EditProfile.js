@@ -10,6 +10,7 @@ const EditProfile = () => {
     const [errs, setErrs] = useState({});
     const [result, setResult] = useState({});
     const [msg, setMsg] = useState("");
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         // axiosConfig.post("/search", keyword).then((rsp) => {
@@ -20,6 +21,7 @@ const EditProfile = () => {
             setEmail(rsp.data.customer_email);
             setMobile(rsp.data.customer_mob);
             setAdd(rsp.data.customer_add);
+            setIsReady(true);
             // console.log(rsp.data);
         }, (err) => {
             debugger
@@ -42,7 +44,10 @@ const EditProfile = () => {
                 setErrs(err.response.data);
             })
     }
-
+    if (!isReady)
+    {
+      return <h2 align="center">Loading....</h2>
+    }
 
     return (
         <div>
