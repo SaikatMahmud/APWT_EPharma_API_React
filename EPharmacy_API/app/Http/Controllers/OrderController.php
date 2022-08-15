@@ -8,6 +8,7 @@ use App\Models\EPMedicine;
 use App\Models\EPOrder;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -17,7 +18,8 @@ class OrderController extends Controller
 
     public function confirmOrder(Request $rq)
     {
-        $rq->validate(
+        $validator=Validator::make(
+            $rq->all(),
             [
                 //"quantity" => "required|integer|max:$rq->orgQuantity",
                 "method" => "required", //|regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
@@ -30,12 +32,15 @@ class OrderController extends Controller
                 "address.required" => "Address can not be blank",
             ]
         );
-        $medicines = EPCart::where('customer_id', session()->get('loggedCustomer')->customer_id)->get();
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $medicines = EPCart::where('customer_id', $rq->header("UserID"))->get();
         $ord = new EPOrder();
         $ord->amount = $rq->amount;
         $ord->method = $rq->method;
         $ord->status = "Pending";
-        $ord->c_id = session()->get('loggedCustomer')->customer_id;
+        $ord->c_id = $rq->header("UserID");
         $ord->save();
 
         if ($ord->save()) {
@@ -47,21 +52,22 @@ class OrderController extends Controller
                 EPMedicine::where('medicine_id', $med->medicine_id)->decrement('availability', $med->quantity);
             }
             //deleting all form cart
-            EPCart::where('customer_id', session()->get('loggedCustomer')->customer_id)->delete();
+            EPCart::where('customer_id', $rq->header("UserID"))->delete();
             // updating customer address if changed during order
-            EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->update(['customer_add' => $rq->address]);
-            $cus = EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->first();
-            session()->forget('loggedCustomer');
-            session()->put('loggedCustomer', $cus);
-            return view('customer.order_confirm_msg_page')->with('amount', $ord->amount);
+            EPCustomer::where('customer_id', $rq->header("UserID"))->update(['customer_add' => $rq->address]);
+            // $cus = EPCustomer::where('customer_id', session()->get('loggedCustomer')->customer_id)->first();
+            // session()->forget('loggedCustomer');
+            // session()->put('loggedCustomer', $cus);
+            // return view('customer.order_confirm_msg_page')->with('amount', $ord->amount);
         }
     }
 
-    public function showList()
+    public function showList(Request $rq)
     { //show all order of a customer
-        $list = EPOrder::where('c_id', session()->get('loggedCustomer')->customer_id)->orderBy('created_at', 'DESC')
+        $list = EPOrder::where('c_id', $rq->header("UserID"))->orderBy('created_at', 'DESC')
         ->paginate(4)->withQueryString();
-        return view('customer.orderList')->with('orders', $list);
+        return response()->json($list);
+        // return view('customer.orderList')->with('orders', $list);
     }
 
     public function cancelOrder($id)

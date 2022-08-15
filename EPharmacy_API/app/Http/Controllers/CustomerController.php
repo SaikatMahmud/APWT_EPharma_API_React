@@ -38,12 +38,16 @@ class CustomerController extends Controller
     public function cart(Request $rq)
     {
         $carts = EPCart::where('customer_id', $rq->header("UserID"))->get();
-        foreach ($carts as $key => $cart) {
-            //$med[]= $cart->where('cart_id', $cart->cart_id)->first()->Medicines;
-            $cart->Medicines;
+        if ($carts ->isEmpty()) {
+            return response()->json(["msg" => "Your cart is empty. Add medicine first to place order."],422);
+        } else {
+            foreach ($carts as $key => $cart) {
+                //$med[]= $cart->where('cart_id', $cart->cart_id)->first()->Medicines;
+                $cart->Medicines;
+                $cart->Customer;
+            }
+            return response()->json($carts);
         }
-        return response()->json($carts);
-
         // return view('customer.cart')->with('allCart', $cart);
     }
 

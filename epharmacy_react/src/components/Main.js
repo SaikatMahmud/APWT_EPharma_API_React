@@ -27,12 +27,13 @@ const Main = () => {
     return (
         <div>
             <BrowserRouter>
-                {
+                {/* {
                     localStorage.getItem('_authToken') != null && <AfterLogin />
                 }
                 {
                      localStorage.getItem('_authToken') == null && <BeforeLogin />
-                }
+                } */}
+                {localStorage.getItem('_authToken')? <AfterLogin/> : <BeforeLogin/>}
                 <Routes>
                     <Route path="/registration" element={<Reg />} />
                     <Route path="/" element={<Home />} />

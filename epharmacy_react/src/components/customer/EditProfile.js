@@ -46,11 +46,12 @@ const EditProfile = () => {
     }
     if (!isReady)
     {
-      return <h2 align="center">Loading....</h2>
+      return <h2 align="center">Page loading....</h2>
     }
 
     return (
         <div>
+            <br/>
             <form onSubmit={handleSubmit}>
                 Name: <input defaultValue={name} onChange={(e) => { setName(e.target.value) }} type="text" /><span>{errs.name ? errs.name[0] : ''}</span><br />
                 Email: <input defaultValue={email} onChange={(e) => { setEmail(e.target.value) }} type="text" /><span>{errs.email ? errs.email[0] : ''}</span><br />
