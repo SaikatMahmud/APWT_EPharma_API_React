@@ -78,8 +78,12 @@ class OrderController extends Controller
 
     public function orderDetails($id)
     {
-        $details = EPOrder::where('order_id', $id)->first();
-        return view('customer.orderDetails')->with('order', $details);
+        $order = EPOrder::where('order_id', $id)->first();
+        $order->Customers;
+        $order->Medicines;
+        return response()->json($order);
+
+        //return view('customer.orderDetails')->with('order', $details);
     }
 
     public function downloadReceipt($id)

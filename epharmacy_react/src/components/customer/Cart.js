@@ -85,12 +85,12 @@ const Cart = () => {
 
           {
             result?.map((cart, index) =>
-              <tbody>
+              <tbody align="center">
                 <tr hidden> {subTotal += (cart.quantity) * (cart.medicines.price)}</tr>
-                <td align="center">{cart.medicines.medicine_name}</td>
-                <td align="center">{cart.quantity} pc</td>
-                <td >{(cart.quantity) * (cart.medicines.price)}</td>
-                <td ><button onClick={() => removeFromCart(cart.cart_id)}>Remove from cart</button></td>
+                <td>{cart.medicines.medicine_name}</td>
+                <td>{cart.quantity} pc</td>
+                <td>{(cart.quantity) * (cart.medicines.price)}</td>
+                <td><button onClick={() => removeFromCart(cart.cart_id)}>Remove from cart</button></td>
 
                 {/* {((cart.quantity)*(cart.medicines.price)).reduce((a,b)=>a+b,0)} */}
                 {/* {setTotal((cart.quantity) * (cart.medicines.price))} */}
@@ -106,7 +106,7 @@ const Cart = () => {
         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
         <b><i>{msgRemove ? msgRemove : ''}</i></b></p>
       <div align="center">
-        <ul><li key={1}>Subtotal amount = {subTotal}</li></ul><br />
+        <ul><li key={1}>Subtotal amount = <b>{subTotal}</b> TK</li></ul><br />
         <h3>Check out ~</h3>
         <form onSubmit={placeOrder}>
           {/* <input type="hidden" name="amount" value="{{$subTotal}}" /> */}

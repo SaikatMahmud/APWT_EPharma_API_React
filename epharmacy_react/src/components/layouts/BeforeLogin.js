@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 const BeforeLogin = () => {
     return (
-        <div>
+        <div align="center">
             <span> <Link to="/">Home</Link> </span>|
             <span> <Link to="/login"> Login</Link> </span>|
             <span> <Link to="/registration"> Register</Link> </span>|

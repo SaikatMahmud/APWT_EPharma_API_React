@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -46,7 +45,7 @@ Route::post('/cart/remove_med/{id}',[CartController::class,'removeFromCart'])->n
 Route::post('/order/confirm',[OrderController::class,'confirmOrder'])->name('confirm.order'); //after clicking placeOrder button in cart page
 Route::post('/order/placed_confirm',[OrderController::class,'confirmPage'])->name('confirm.order.page'); //confirmation msg page
 Route::get('/order/all/list',[OrderController::class,'showList'])->name('order.list'); //show all order of customer
-Route::get('/cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('order.cancel'); //cancel an order on click
-Route::get('/details/order/{id}',[OrderController::class,'orderDetails'])->name('order.details'); //show details in individual page
+Route::post('/cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('order.cancel'); //cancel an order on click
+Route::post('/details/order/{id}',[OrderController::class,'orderDetails'])->name('order.details'); //show details in individual page
 Route::get('/order/receipt/{id}',[OrderController::class,'downloadReceipt'])->name('receipt.download');
 

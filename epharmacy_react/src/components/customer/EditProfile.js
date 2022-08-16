@@ -50,7 +50,7 @@ const EditProfile = () => {
     }
 
     return (
-        <div>
+        <div align="center">
             <br/>
             <form onSubmit={handleSubmit}>
                 Name: <input defaultValue={name} onChange={(e) => { setName(e.target.value) }} type="text" /><span>{errs.name ? errs.name[0] : ''}</span><br />
