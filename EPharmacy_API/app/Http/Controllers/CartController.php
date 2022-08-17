@@ -48,7 +48,7 @@ class CartController extends Controller
         $validator = Validator::make(
             $rq->all(),
             [
-                "quantity" => "required|integer|max:$rq->avlQuantity",
+                "quantity" => "required|integer|max:$rq->avlQuantity|min:1",
             ],
             [
                 "quantity.required" => "The quantity field is required.",
@@ -65,8 +65,10 @@ class CartController extends Controller
             EPCart::where('cart_id', $cart->cart_id)->update(
                 ['quantity' => $cart->quantity + $rq["quantity"]]
             );
-            session()->flash("added", 'Medicine quantity updated');
-            return back();
+            return response()->json(["msg"=>"Medicine quantity updated"]);
+
+            // session()->flash("added", 'Medicine quantity updated');
+            // return back();
         }
         //if not exist
         $cart = new EPCart();
@@ -75,16 +77,19 @@ class CartController extends Controller
         $cart->quantity = $rq["quantity"];
         $cart->save();
         if ($cart->save()) {
-            session()->flash("added", 'Medicine added to cart');
-            return back();
+            return response()->json(["msg"=>"Medicine added to cart"]);
+            // session()->flash("added", 'Medicine added to cart');
+            // return back();
         } else {
-            session()->flash("added", 'Add to cart failed');
-            return back();
+            return response()->json(["msg"=>"Add to cart failed"]);
+            // session()->flash("added", 'Add to cart failed');
+            // return back();
         }
     }
     public function removeFromCart($id)
     {
         EPCart::where('cart_id', $id)->delete();
-        return redirect()->route('cus.cart');
+
+       return redirect()->route('cus.cart');
     }
 }

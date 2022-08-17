@@ -14,7 +14,7 @@ const SearchResult = () => {
     const [result, setResult] = useState({});
     const [search, setSearch] = useState("");
     const [errs, setErrs] = useState("");
-    const [quantity, setQuantity] = useState("");
+    const [quantity, setQuantity] = useState([]);
     const [medId, setMedId] = useState("");
     const navigate = useNavigate();
 
@@ -66,16 +66,19 @@ const SearchResult = () => {
             debugger
         })
     }
-    const addToCart = (quantity,medId,avlQuantity) => {
-        const data= {quantity:quantity,medid:medId,avlQuantity:avlQuantity}
-        axiosConfig.post("/add-to-cart",data).then((rsp) => {
-          debugger
-          setQuantity("");
+    const addToCart = (quantity, medId, avlQuantity) => {
+        const data = { quantity: quantity, medId: medId, avlQuantity: avlQuantity }
+        axiosConfig.post("/add-to-cart", data).then((rsp) => {
+            debugger
+            
+            setQuantity([]);
+           
         }, (err) => {
-          setErrs(err.response.data);
-    
+            setQuantity([]);
+            setErrs(err.response.data);
+
         })
-      }
+    }
 
     // getData=(data)=>{
     //     axios.get('/search?page=' + data.page).then((response) => {
@@ -93,35 +96,46 @@ const SearchResult = () => {
             </div>
             <div>
                 {
-                    result.data?.map((med, index) =>
+                    result.data?.map((med, index) => (
                         // <li key={st.medicine_id}>{st.medicine_name}</li>
-                        <span>
+                        <span key={index}>
                             {/* <form key={index} onSubmit={handleSubmit}> */}
-                                <table  border="1" align="center" cellpadding="10" width="40%">
-                                    <tbody key={index}>
-                                        <td key={index}>
-                                            Name: {med.medicine_name}<br />
-                                            Genre: {med.genre}<br />
-                                            &emsp;&emsp;&emsp;
-                                            Details: see more...<br />
-                                            Price: {med.price} TK <br />
-                                            <div align="right">
-                                            <input key={index}  value={quantity[index]} onChange={(e) => { setQuantity(e.target[index].value) }} type="number" placeholder="Quantity" />
+                            <table border="1" align="center" cellPadding="10" width="40%">
+                                <tbody >
+                                    <td >
+                                        Name: {med.medicine_name}<br />
+                                        Genre: {med.genre}<br />
+                                        &emsp;&emsp;&emsp;
+                                        Details: see more...<br />
+                                        Price: {med.price} TK <br />
+                                        <div align="right">
+                      {/* <input defaultValue={quantity} onChange={(e) => {setQuantity.bind(e.target.value) }} type="number" placeholder="Quantity" /> */}
+                                            {/* <input defaultValue={quantity} onChange={(e) =>
+                                                setQuantity((prev) => {
+                                                    return { ...prev, [index]: e.target.value };
+                                                })
+                                            } type="number" placeholder="Quantity" /> */}
+                                             <input defaultValue={quantity} onChange={(e) =>
+                                                setQuantity(() => {
+                                                    return { ...quantity, [index]: e.target.value };
+                                                })
+                                            } type="number" placeholder="Quantity" />
+
                                             Available:{med.availability}
                                             {/* <input key={index} value={setMedId(med.medicine_id)} type="hidden"/> 
                                     <input key={index} value={setMedId(med.medicine_id)} type="hidden"/>  */}
-                                           <br/> <button key={index} onClick={()=>addToCart(quantity,med.medicine_id,med.availability)}>Add to cart</button>
-                                            </div>
-                                            {errs.quantity ? errs.quantity[0] : ''}
-                                        </td>
+                                            <br /> <button onClick={() => addToCart(quantity[index], med.medicine_id, med.availability)}>Add to cart</button>
+                                        </div>
+                                        <span>{errs.quantity ? errs.quantity[0] : ''}</span>
+                                    </td>
 
-                                    </tbody>
-                                </table>
-                                &nbsp;
+                                </tbody>
+                            </table>
+                            &nbsp;
                             {/* </form> */}
                         </span>
-                                    // <input key={index} type="submit" value="search" /><span> {errs ? errs : ''}</span>
-                    )
+                        // <input key={index} type="submit" value="search" /><span> {errs ? errs : ''}</span>
+                    ), this)
                 }
 
                 {/* <div>
