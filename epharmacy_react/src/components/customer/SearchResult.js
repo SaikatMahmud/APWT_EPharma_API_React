@@ -14,6 +14,7 @@ const SearchResult = () => {
     const [result, setResult] = useState({});
     const [search, setSearch] = useState("");
     const [errs, setErrs] = useState("");
+    const [addCartMsg, setCartMsg] = useState({});
     const [quantity, setQuantity] = useState([]);
     const [medId, setMedId] = useState("");
     const navigate = useNavigate();
@@ -66,16 +67,25 @@ const SearchResult = () => {
             debugger
         })
     }
-    const addToCart = (quantity, medId, avlQuantity) => {
-        const data = { quantity: quantity, medId: medId, avlQuantity: avlQuantity }
+    const addToCart = (quantity, index, medId, avlQuantity) => {
+        // let quan=quantity+index;
+        const data = { ["quantity"+index]: quantity, key: index, medId: medId, avlQuantity: avlQuantity }
         axiosConfig.post("/add-to-cart", data).then((rsp) => {
             debugger
-            
-            setQuantity([]);
-           
+            setCartMsg(rsp.data);
+            // setCartMsg(() => {
+            //     return { ...addCartMsg, [index]:rsp.data };
+            // })
+
+
+            //setQuantity([]);   
+
         }, (err) => {
-            setQuantity([]);
-            setErrs(err.response.data);
+            setCartMsg(err.response.data);
+            // setCartMsg(() => {
+            //     return { ...addCartMsg, [index]:err.response.data };
+            // })
+            //setQuantity([]);
 
         })
     }
@@ -87,6 +97,7 @@ const SearchResult = () => {
     // }
     return (
         <div>
+            {console.log(addCartMsg)}
             <br />
             <div align="right">
                 <form onSubmit={handleSubmit}>
@@ -109,27 +120,29 @@ const SearchResult = () => {
                                         Details: see more...<br />
                                         Price: {med.price} TK <br />
                                         <div align="right">
-                      {/* <input defaultValue={quantity} onChange={(e) => {setQuantity.bind(e.target.value) }} type="number" placeholder="Quantity" /> */}
+                                            {/* <input defaultValue={quantity} onChange={(e) => {setQuantity.bind(e.target.value) }} type="number" placeholder="Quantity" /> */}
                                             {/* <input defaultValue={quantity} onChange={(e) =>
                                                 setQuantity((prev) => {
                                                     return { ...prev, [index]: e.target.value };
                                                 })
                                             } type="number" placeholder="Quantity" /> */}
-                                             <input defaultValue={quantity} onChange={(e) =>
+                                            <input defaultValue={quantity} onChange={(e) =>
                                                 setQuantity(() => {
                                                     return { ...quantity, [index]: e.target.value };
                                                 })
                                             } type="number" placeholder="Quantity" />
 
-                                            Available:{med.availability}
+                                            Available:<b>{med.availability}</b>
                                             {/* <input key={index} value={setMedId(med.medicine_id)} type="hidden"/> 
                                     <input key={index} value={setMedId(med.medicine_id)} type="hidden"/>  */}
-                                            <br /> <button onClick={() => addToCart(quantity[index], med.medicine_id, med.availability)}>Add to cart</button>
+                                            <br /> <button onClick={() => addToCart(quantity[index], index, med.medicine_id, med.availability)}>Add to cart</button>
                                         </div>
-                                        <span>{errs.quantity ? errs.quantity[0] : ''}</span>
+                                        <b><i> {addCartMsg["quantity" + index] ? addCartMsg["quantity" + index][0] : ''}
+                                            {addCartMsg["msg"+index] ? addCartMsg["msg"+index] : ''}</i></b>
                                     </td>
 
                                 </tbody>
+
                             </table>
                             &nbsp;
                             {/* </form> */}

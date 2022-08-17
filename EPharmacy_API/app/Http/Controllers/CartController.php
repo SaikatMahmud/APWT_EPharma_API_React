@@ -48,12 +48,12 @@ class CartController extends Controller
         $validator = Validator::make(
             $rq->all(),
             [
-                "quantity" => "required|integer|max:$rq->avlQuantity|min:1",
+                "quantity$rq->key" => "required|integer|max:$rq->avlQuantity|min:1",
             ],
             [
-                "quantity.required" => "The quantity field is required.",
-                "quantity.integer" => "Must be an decimal number",
-                "quantity.max" => "More than avaiable stock",
+                "quantity$rq->key.required" => "The quantity field is required.",
+                "quantity$rq->key.integer" => "Must be an decimal number",
+                "quantity$rq->key.max" => "More than avaiable stock",
             ]
         );
         if ($validator->fails()) {
@@ -63,9 +63,9 @@ class CartController extends Controller
             ->where('medicine_id', $rq->medId)->first();
         if ($cart) { //update quantity if medicine already exist
             EPCart::where('cart_id', $cart->cart_id)->update(
-                ['quantity' => $cart->quantity + $rq["quantity"]]
+                ['quantity' => $cart->quantity + $rq["quantity$rq->key"]]
             );
-            return response()->json(["msg"=>"Medicine quantity updated"]);
+            return response()->json(["msg$rq->key"=>"Medicine quantity updated"]);
 
             // session()->flash("added", 'Medicine quantity updated');
             // return back();
@@ -74,14 +74,14 @@ class CartController extends Controller
         $cart = new EPCart();
         $cart->customer_id = $rq->header("UserID");
         $cart->medicine_id = $rq->medId;
-        $cart->quantity = $rq["quantity"];
+        $cart->quantity = $rq["quantity$rq->key"];
         $cart->save();
         if ($cart->save()) {
-            return response()->json(["msg"=>"Medicine added to cart"]);
+            return response()->json(["msg$rq->key"=>"Medicine added to cart"]);
             // session()->flash("added", 'Medicine added to cart');
             // return back();
         } else {
-            return response()->json(["msg"=>"Add to cart failed"]);
+            return response()->json(["msg$rq->key"=>"Add to cart failed"]);
             // session()->flash("added", 'Add to cart failed');
             // return back();
         }
