@@ -83,11 +83,11 @@ class CustomerController extends Controller
 
         // if ($rq->hasFile('cus_pic')) {
         //     $image_name = "";
-        //     $image_name = (session()->get('loggedCustomer')->customer_id) . "_" . (session()->get('loggedCustomer')->customer_name)
-        //         . "." . $rq->file('cus_pic')->getClientOriginalExtension();
-        //     File::delete('public' . '/' . session()->get('loggedCustomer')->pro_pic);
+        //     $cus=EPCustomer::where('customer_id',$rq->header("UserID"))->first();
+        //     $image_name = $cus->customer_id . "_" . $cus->customer_name. "." . $rq->file('cus_pic')->getClientOriginalExtension();
+        //     File::delete('public' . '/' . $cus->pro_pic);
         //     $rq->file('cus_pic')->storeAs('public/cus_pic', $image_name);
-        //     EPCustomer::where('customer_id', $rq->header("UserID"))->update(
+        //     EPCustomer::where('customer_id', $cus->customer_id)->update(
         //         [
         //             'customer_name' => $rq->name,
         //             'customer_email' => $rq->email,
@@ -96,6 +96,8 @@ class CustomerController extends Controller
         //             'pro_pic' => "cus_pic/" . $image_name //if has file
         //         ]
         //     );
+        //     $cus = EPCustomer::where('customer_id', $rq->header("UserID"))->first();
+        //     return response()->json($cus);
         // } 
         // else {
         EPCustomer::where('customer_id', $rq->header("UserID"))->update(
@@ -116,6 +118,38 @@ class CustomerController extends Controller
         // session()->flash('msg', 'Edit saved');
         // return back();
     }
+
+
+   function editProfileImage(Request $rq){
+    $validator = Validator::make(
+        $rq->all(),
+        [
+            "cus_pic" => "required|mimes:jpg,png,jpeg"
+        ],
+        [
+            // "password.regex" => "Password must contain upper/lower case, number, symbol and minimum 8 digits",
+            //"confirmPass.same" => "Both passsword not matched"
+            "cus_pic.required" => "Select a photo to upload !"
+        ]
+    );
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+        $image_name = "";
+        $cus=EPCustomer::where('customer_id',$rq->header("UserID"))->first();
+        $image_name = $cus->customer_id . "_" . $cus->customer_name. "." . $rq->file('cus_pic')->getClientOriginalExtension();
+        File::delete('public' . '/' . $cus->pro_pic);
+        $rq->file('cus_pic')->storeAs('public/cus_pic', $image_name);
+        EPCustomer::where('customer_id', $cus->customer_id)->update(
+            [
+                'pro_pic' => "cus_pic/" . $image_name //if has file
+            ]
+        );
+        $cus = EPCustomer::where('customer_id', $rq->header("UserID"))->first();
+        return response()->json($cus);
+   }
+
 
     public function regSubmit(Request $rq)
     {

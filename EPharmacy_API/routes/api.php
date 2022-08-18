@@ -34,6 +34,7 @@ Route::post('/registration',[CustomerController::class,'regSubmit'])->name('cus.
 
 Route::get('/profile',[CustomerController::class,'profile'])->name('cus.profile')->middleware('verify.api'); //edit or view profile
 Route::post('/profile',[CustomerController::class,'editProfile'])->name('cus.profile.edit')->middleware('verify.api'); //save the edit after click 'save'
+Route::post('/profile-image',[CustomerController::class,'editProfileImage'])->name('cus.profile.editImage')->middleware('verify.api'); //save the edit after click 'save'
 
 Route::get('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
 Route::get('/details/med/id={id}',[MedicineController::class,'details'])->name('med.details'); //show medicine full details

@@ -6,7 +6,6 @@ import { createSearchParams, useSearchParams } from "react-router-dom";
 import Home from "./Home";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
-require("bootstrap/less/bootstrap.less");
 
 // require("bootstrap/less/bootstrap.less");
 //  import {Paginator} from "react-laravel-paginator";
@@ -128,7 +127,7 @@ const SearchResult = () => {
                                 <tbody >
                                     <td >
                                         Name: {med.medicine_name}<br />
-                                        Genre: {med.genre}<br />
+                                        Genre: {med.genre}
                                         &emsp;&emsp;&emsp;
                                         Details: see more...<br />
                                         Price: {med.price} TK <br />
@@ -164,7 +163,7 @@ const SearchResult = () => {
                     ), this)
                 }
 
-                <div>
+                <div align="center">
                     <Pagination
                         activePage={result.current_page}
                         itemsCountPerPage={result.per_page}

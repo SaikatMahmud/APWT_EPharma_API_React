@@ -3,7 +3,6 @@ import axiosConfig from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
-require("bootstrap/less/bootstrap.less");
 
 const Orders = () => {
   const [result, setResult] = useState([]);
@@ -62,14 +61,15 @@ const Orders = () => {
   }
   return (
     <div>
+      
       <h3 align="center">Your order list</h3>
-      <table border="1" align="center" cellPadding="4">
-        <tr>
-          <th>Serial</th>
-          <th>Order Number</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Action</th>
+      <table border="1" align="center" cellpadding="4" width="43%" >
+        <tr >
+          <th className="text-center">Serial</th>
+          <th className="text-center">Order Number</th>
+          <th className="text-center">Amount</th>
+          <th className="text-center">Status</th>
+          <th className="text-center">Action</th>
         </tr>
 
         {
@@ -90,12 +90,14 @@ const Orders = () => {
           )
         }
       </table>
-      <Pagination
-        activePage={result.current_page}
-        itemsCountPerPage={result.per_page}
-        totalItemsCount={result.total}
-        pageRangeDisplayed={5}
-        onChange={handlePageChange.bind(this)} />
+      <div align="center">
+        
+        <Pagination
+          activePage={result.current_page}
+          itemsCountPerPage={result.per_page}
+          totalItemsCount={result.total}
+          pageRangeDisplayed={5}
+          onChange={handlePageChange.bind(this)} /></div>
     </div>
   )
 }
