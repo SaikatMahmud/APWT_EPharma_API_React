@@ -138,12 +138,12 @@ class CustomerController extends Controller
 
         $image_name = "";
         $cus=EPCustomer::where('customer_id',$rq->header("UserID"))->first();
-        $image_name = $cus->customer_id . "_" . $cus->customer_name. "." . $rq->file('cus_pic')->getClientOriginalExtension();
-        File::delete('public' . '/' . $cus->pro_pic);
+        $image_name = $cus->customer_id . "_" . $cus->customer_name."_".time(). "." . $rq->file('cus_pic')->getClientOriginalExtension();
+        File::delete(public_path('/storage/cus_pic/'.$cus->pro_pic));
         $rq->file('cus_pic')->storeAs('public/cus_pic', $image_name);
         EPCustomer::where('customer_id', $cus->customer_id)->update(
             [
-                'pro_pic' => "cus_pic/" . $image_name //if has file
+                'pro_pic' => $image_name //if has file
             ]
         );
         $cus = EPCustomer::where('customer_id', $rq->header("UserID"))->first();

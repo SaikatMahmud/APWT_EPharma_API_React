@@ -51,7 +51,7 @@ const EditProfile = () => {
                 setFile(null);
                 setPic("");
                 navigate({pathname: '/editProfile'});
-                setMsg("Profile updated");
+                setMsg("Image updated");
             }, (err) => {
                 //  debugger;
                 setErrs(err.response.data);
@@ -84,7 +84,7 @@ const EditProfile = () => {
             <br />
             <h3>----------Your Profile----------</h3>
             <form onSubmit={uploadImage}>
-                <img width="110" height="100" src={`http://localhost:8000/storage/${proPic}`} /> <br /><br />
+                <img width="120" height="100" src={`http://localhost:8000/storage/cus_pic/${proPic}`} /> <br /><br />
                 Upload profile pic-<input type="file" onChange={(e) => { setFile(e.target.files[0]) }} name="image" /><br/>
                 <span>{errs.cus_pic ? errs.cus_pic[0] : ''}<br/></span>
                 <input type="submit" value="Upload"/>

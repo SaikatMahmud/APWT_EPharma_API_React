@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\EPCart;
 use App\Models\EPCustomer;
 use App\Models\EPMedicine;
 use App\Models\EPOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Validator;
 
@@ -93,6 +96,8 @@ class OrderController extends Controller
         $dompdf->loadHtml(view('customer.downloadOrder')->with('order', $details));
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-        $dompdf->stream('order_receipt.pdf',['Attachment'=>false]);
+        $dompdf->stream('order_receipt.pdf',['Attachment'=>true]);
+        //return response()->download(public_path($dompdf));
+        return response()->download(public_path($dompdf));
     }
 }

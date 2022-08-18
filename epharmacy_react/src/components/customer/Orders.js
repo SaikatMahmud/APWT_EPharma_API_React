@@ -3,6 +3,10 @@ import axiosConfig from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
+import { saveAs } from "file-saver";
+import fileDownload from "js-file-download";
+import axios from "axios";
+
 
 const Orders = () => {
   const [result, setResult] = useState([]);
@@ -35,6 +39,29 @@ const Orders = () => {
       setErrs(err.response.data);
 
     })
+  }
+  const downloadOrder = (id) => {
+    axiosConfig.get(`/order/receipt/${id}`,{responseType: 'blob'}).then((rsp) => {
+      debugger
+      // saveAs(rsp.blob,'order_recipt.pdf');
+      fileDownload(rsp.data, 'order_recipt.pdf');
+
+    }, (err) => {
+      //setErrs(err.response.data);
+
+    })
+    // axios({
+    //   url: `http://localhost:8000/api/order/receipt/${id}`,
+    //   method: 'GET',
+    //   responseType: 'blob', // important
+    // }).then((response) => {
+    //    const url = window.URL.createObjectURL(new Blob([response.data]));
+    //    const link = document.createElement('a');
+    //    link.href = url;
+    //    link.setAttribute('download', 'file.pdf'); //or any other extension
+    //    document.body.appendChild(link);
+    //    link.click();
+    // });
   }
   const handlePageChange = (pageNumber) => {
 
@@ -83,7 +110,7 @@ const Orders = () => {
                 {
                   order.status == 'Pending' && <span><button onClick={() => cancelOrder(order.order_id)}>Cancel</button> | </span>
                 }
-                <button>Download</button>
+                <button onClick={() => downloadOrder(order.order_id)}>Download</button>
               </td>
 
             </tbody>
