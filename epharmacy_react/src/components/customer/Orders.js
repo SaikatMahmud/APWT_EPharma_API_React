@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axiosConfig from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Pagination from "react-js-pagination";
+require("bootstrap/less/bootstrap.less");
+
 const Orders = () => {
   const [result, setResult] = useState([]);
   const [total, setTotal] = useState();
@@ -34,6 +37,22 @@ const Orders = () => {
 
     })
   }
+  const handlePageChange = (pageNumber) => {
+
+    console.log(`active page is ${pageNumber}`);
+    // const searchPage = { search: keyword, page: pageNumber };
+    //axiosConfig.post("/search", keyword);
+    // this.setState({ activePage: pageNumber });
+    // axiosConfig.post("/search",searchPage).then((rsp) => {
+    axiosConfig.get(`/order/all/list?page=${pageNumber}`).then((rsp) => {
+
+      debugger
+      setResult(rsp.data);
+      // console.log(rsp.data);
+    }, (err) => {
+      debugger
+    })
+  }
 
   if (errs.msg) { //if cart is empty, "msg" from API
     return <h3 align="center">You did not place any order.</h3>
@@ -62,7 +81,7 @@ const Orders = () => {
               <td>{order.status}</td>
               <td>
                 {
-                  order.status=='Pending' && <span><button onClick={()=>cancelOrder(order.order_id)}>Cancel</button> | </span>
+                  order.status == 'Pending' && <span><button onClick={() => cancelOrder(order.order_id)}>Cancel</button> | </span>
                 }
                 <button>Download</button>
               </td>
@@ -71,6 +90,12 @@ const Orders = () => {
           )
         }
       </table>
+      <Pagination
+        activePage={result.current_page}
+        itemsCountPerPage={result.per_page}
+        totalItemsCount={result.total}
+        pageRangeDisplayed={5}
+        onChange={handlePageChange.bind(this)} />
     </div>
   )
 }

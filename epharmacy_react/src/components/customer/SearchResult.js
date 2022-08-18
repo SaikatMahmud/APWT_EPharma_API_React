@@ -6,6 +6,7 @@ import { createSearchParams, useSearchParams } from "react-router-dom";
 import Home from "./Home";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
+require("bootstrap/less/bootstrap.less");
 
 // require("bootstrap/less/bootstrap.less");
 //  import {Paginator} from "react-laravel-paginator";
@@ -24,6 +25,7 @@ const SearchResult = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsReady(false);
         // axiosConfig.post("/search", keyword).then((rsp) => {
         axiosConfig.get(`/search?search=${searchParams.get("search")}`).then((rsp) => {
             setCartMsg({});
@@ -36,7 +38,7 @@ const SearchResult = () => {
 
         })
 
-    },[location]);
+    }, [location]);
 
     // const constructor=(props)=>{
     //     super(props);
@@ -58,18 +60,19 @@ const SearchResult = () => {
                 search: `?${createSearchParams(data)}`,
             });
             this.useEffect();
-       
+
         }
     }
 
     const handlePageChange = (pageNumber) => {
 
         console.log(`active page is ${pageNumber}`);
-        const searchPage = { search: keyword, page: pageNumber };
+        // const searchPage = { search: keyword, page: pageNumber };
         //axiosConfig.post("/search", keyword);
         // this.setState({ activePage: pageNumber });
         // axiosConfig.post("/search",searchPage).then((rsp) => {
-        axiosConfig.get(`/search?search=${searchParams.get("search")}&page${pageNumber}`).then((rsp) => {
+        axiosConfig.get(`/search?search=${searchParams.get("search")}&page=${pageNumber}`).then((rsp) => {
+            setCartMsg({});
             debugger
             setResult(rsp.data);
             // console.log(rsp.data);
@@ -113,7 +116,7 @@ const SearchResult = () => {
             {/* {console.log(addCartMsg)} */}
             <br />
             <div align="right">
-               <SearchBar/>
+                <SearchBar />
             </div>
             <div>
                 {
@@ -161,14 +164,14 @@ const SearchResult = () => {
                     ), this)
                 }
 
-                {/* <div>
+                <div>
                     <Pagination
                         activePage={result.current_page}
-                        itemsCountPerPage={result.to}
+                        itemsCountPerPage={result.per_page}
                         totalItemsCount={result.total}
                         pageRangeDisplayed={5}
                         onChange={handlePageChange.bind(this)} />
-                </div> */}
+                </div>
 
                 {/* <Paginator currPage={result.current_page} lastPage={result.last_page} onChange={this.onCurrPageChange} /> */}
                 {/* <Pagination changePage={this.getData} data={data}/> */}
