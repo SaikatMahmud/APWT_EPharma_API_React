@@ -5,10 +5,13 @@ import Pagination from "react-js-pagination";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import Home from "./Home";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./SearchBar";
+
 // require("bootstrap/less/bootstrap.less");
 //  import {Paginator} from "react-laravel-paginator";
 //  import { Pagination } from "react-laravel-paginex";
 const SearchResult = () => {
+    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const keyword = { search: searchParams.get("search") };
     const [result, setResult] = useState({});
@@ -17,19 +20,23 @@ const SearchResult = () => {
     const [addCartMsg, setCartMsg] = useState({});
     const [quantity, setQuantity] = useState([]);
     const [medId, setMedId] = useState("");
+    const [isReady, setIsReady] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         // axiosConfig.post("/search", keyword).then((rsp) => {
         axiosConfig.get(`/search?search=${searchParams.get("search")}`).then((rsp) => {
+            setCartMsg({});
             debugger
+            //fetchData();
             setResult(rsp.data);
             console.log(rsp.data);
+            setIsReady(true);
         }, (err) => {
 
         })
 
-    }, []);
+    },[location]);
 
     // const constructor=(props)=>{
     //     super(props);
@@ -45,10 +52,13 @@ const SearchResult = () => {
         }
         else {
             const data = { search };
+            setResult("");
             navigate({
                 pathname: '/search',
                 search: `?${createSearchParams(data)}`,
             });
+            this.useEffect();
+       
         }
     }
 
@@ -62,14 +72,14 @@ const SearchResult = () => {
         axiosConfig.get(`/search?search=${searchParams.get("search")}&page${pageNumber}`).then((rsp) => {
             debugger
             setResult(rsp.data);
-            console.log(rsp.data);
+            // console.log(rsp.data);
         }, (err) => {
             debugger
         })
     }
     const addToCart = (quantity, index, medId, avlQuantity) => {
         // let quan=quantity+index;
-        const data = { ["quantity"+index]: quantity, key: index, medId: medId, avlQuantity: avlQuantity }
+        const data = { ["quantity" + index]: quantity, key: index, medId: medId, avlQuantity: avlQuantity }
         axiosConfig.post("/add-to-cart", data).then((rsp) => {
             debugger
             setCartMsg(rsp.data);
@@ -89,6 +99,9 @@ const SearchResult = () => {
 
         })
     }
+    if (!isReady) {
+        return <h2 align="center">Page loading....</h2>
+    }
 
     // getData=(data)=>{
     //     axios.get('/search?page=' + data.page).then((response) => {
@@ -97,13 +110,10 @@ const SearchResult = () => {
     // }
     return (
         <div>
-            {console.log(addCartMsg)}
+            {/* {console.log(addCartMsg)} */}
             <br />
             <div align="right">
-                <form onSubmit={handleSubmit}>
-                    <input value={search} type="text" placeholder="Search here" onChange={(e) => { setSearch(e.target.value) }} />
-                    <input type="submit" value="search" /><span> {errs ? errs : ''}</span>
-                </form>
+               <SearchBar/>
             </div>
             <div>
                 {
@@ -138,7 +148,7 @@ const SearchResult = () => {
                                             <br /> <button onClick={() => addToCart(quantity[index], index, med.medicine_id, med.availability)}>Add to cart</button>
                                         </div>
                                         <b><i> {addCartMsg["quantity" + index] ? addCartMsg["quantity" + index][0] : ''}
-                                            {addCartMsg["msg"+index] ? addCartMsg["msg"+index] : ''}</i></b>
+                                            {addCartMsg["msg" + index] ? addCartMsg["msg" + index] : ''}</i></b>
                                     </td>
 
                                 </tbody>
