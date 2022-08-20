@@ -12,7 +12,7 @@ const SearchBar = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!search) {
-            setErrs("Type keyword to serach");
+            setErrs("Type keyword to search");
         }
         else {
             const data = { search };

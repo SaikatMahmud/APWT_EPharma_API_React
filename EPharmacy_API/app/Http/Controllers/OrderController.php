@@ -62,6 +62,7 @@ class OrderController extends Controller
             // session()->forget('loggedCustomer');
             // session()->put('loggedCustomer', $cus);
             // return view('customer.order_confirm_msg_page')->with('amount', $ord->amount);
+            return response()->json($ord->amount);
         }
     }
 

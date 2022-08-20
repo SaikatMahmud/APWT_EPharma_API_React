@@ -6,6 +6,7 @@ import { createSearchParams, useSearchParams } from "react-router-dom";
 import Home from "./Home";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import { Link } from "react-router-dom";
 
 // require("bootstrap/less/bootstrap.less");
 //  import {Paginator} from "react-laravel-paginator";
@@ -46,22 +47,22 @@ const SearchResult = () => {
     //     };
     //   }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!search) {
-            setErrs("Type keyword to serach");
-        }
-        else {
-            const data = { search };
-            setResult("");
-            navigate({
-                pathname: '/search',
-                search: `?${createSearchParams(data)}`,
-            });
-            this.useEffect();
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     if (!search) {
+    //         setErrs("Type keyword to serach");
+    //     }
+    //     else {
+    //         const data = { search };
+    //         setResult("");
+    //         navigate({
+    //             pathname: '/search',
+    //             search: `?${createSearchParams(data)}`,
+    //         });
+    //         this.useEffect();
 
-        }
-    }
+    //     }
+    // }
 
     const handlePageChange = (pageNumber) => {
 
@@ -129,7 +130,7 @@ const SearchResult = () => {
                                         Name: {med.medicine_name}<br />
                                         Genre: {med.genre}
                                         &emsp;&emsp;&emsp;
-                                        Details: see more...<br />
+                                        Details:<Link to={`/medicine/details/${med.medicine_id}`}> see more...</Link><br />
                                         Price: {med.price} TK <br />
                                         <div align="right">
                                             {/* <input defaultValue={quantity} onChange={(e) => {setQuantity.bind(e.target.value) }} type="number" placeholder="Quantity" /> */}

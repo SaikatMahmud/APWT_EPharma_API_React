@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\EPCart;
 use App\Models\EPMedicine;
+use App\Models\EPSupplier;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,7 +35,11 @@ class MedicineController extends Controller
     public function details($id)
     {
         $med = EPMedicine::where('medicine_id', $id)->first();
-        return view('customer.medDetails')->with('med', $med);
+        $med->Suppliers;
+        $sup=$med->Suppliers()->where('medicine_id',$med->medicine_id)->first()->Suppliers->supplier_name;
+        return response()->json(["med"=>$med,"supplier_name"=>$sup]);
+
+        // return view('customer.medDetails')->with('med', $med);
     }
 
     // public function checkStock($med_id)

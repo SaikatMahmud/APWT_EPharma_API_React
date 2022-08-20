@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 
 const OrderDetails = () => {
-    const { id, name } = useParams();
+    const { id } = useParams();
     const [result, setResult] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [errs, setErrs] = useState({});
@@ -63,17 +63,6 @@ const OrderDetails = () => {
                     <br />
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
 
         </div>
     )

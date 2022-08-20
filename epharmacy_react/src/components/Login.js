@@ -20,20 +20,19 @@ const Reg = () => {
                 localStorage.setItem('_authToken', succ.data.token_key);
                 localStorage.setItem('_authUserId', succ.data.user_id);
                 navigate({ pathname: '/' });
-
-
             }, (err) => {
                 debugger;
                 setErrs(err.response.data);
             })
     }
     return (
+        <div align="center">
         <form onSubmit={handleSubmit}>
-            <h1>{errs.msg}</h1>
+            <h2>{errs.msg}</h2>
             Email: <input value={email} onChange={(e) => { setEmail(e.target.value) }} type="text" /><span>{errs.email ? errs.email[0] : ''}</span><br />
-            Password: <input value={password} onChange={(e) => { setPassword(e.target.value) }} type="text" /><span>{errs.password ? errs.password[0] : ''}</span><br />
+            Password: <input value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" /><span>{errs.password ? errs.password[0] : ''}</span><br />
             <input type="submit" value="Login" />
-        </form>
+        </form></div>
     )
 }
 export default Reg;

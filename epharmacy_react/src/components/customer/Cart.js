@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosConfig from "../axiosConfig";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 const Cart = () => {
   const [result, setResult] = useState([]);
   const [total, setTotal] = useState();
@@ -9,6 +10,8 @@ const Cart = () => {
   const [method, setMethod] = useState("");
   const [errs, setErrs] = useState({});
   const [msgRemove, setRemove] = useState("");
+  const navigate = useNavigate();
+
   var subTotal = 0;
 
   useEffect(() => {
@@ -43,7 +46,8 @@ const Cart = () => {
     const data = { amount: subTotal, address: cusAdd, method: method };
     axiosConfig.post('/order/confirm', data).
       then((rsp) => {
-
+        localStorage.setItem('_orderConfirmed',"placed");
+        navigate({ pathname: '/orderConfirm' });
       }, (err) => {
         //  debugger;
         setErrs(err.response.data);

@@ -38,15 +38,15 @@ Route::post('/profile-image',[CustomerController::class,'editProfileImage'])->na
 
 Route::get('/search',[MedicineController::class,'searchResult'])->name('search.result'); //show search result
 Route::get('/details/med/id={id}',[MedicineController::class,'details'])->name('med.details'); //show medicine full details
-Route::post('/add-to-cart',[CartController::class,'addtocart'])->name('cus.addtocart'); //from search result/detials page
+Route::post('/add-to-cart',[CartController::class,'addtocart'])->name('cus.addtocart')->middleware('verify.api'); //from search result/detials page
 
 
 Route::get('/cart',[CustomerController::class,'cart'])->name('cus.cart')->middleware('verify.api'); //view cart
-Route::post('/cart/remove_med/{id}',[CartController::class,'removeFromCart'])->name('cart.remove'); //remove medicine from cart
-Route::post('/order/confirm',[OrderController::class,'confirmOrder'])->name('confirm.order'); //after clicking placeOrder button in cart page
-Route::post('/order/placed_confirm',[OrderController::class,'confirmPage'])->name('confirm.order.page'); //confirmation msg page
-Route::get('/order/all/list',[OrderController::class,'showList'])->name('order.list'); //show all order of customer
-Route::post('/cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('order.cancel'); //cancel an order on click
-Route::post('/details/order/{id}',[OrderController::class,'orderDetails'])->name('order.details'); //show details in individual page
-Route::get('/order/receipt/{id}',[OrderController::class,'downloadReceipt'])->name('receipt.download');
+Route::post('/cart/remove_med/{id}',[CartController::class,'removeFromCart'])->name('cart.remove')->middleware('verify.api'); //remove medicine from cart
+Route::post('/order/confirm',[OrderController::class,'confirmOrder'])->name('confirm.order')->middleware('verify.api'); //after clicking placeOrder button in cart page
+Route::post('/order/placed_confirm',[OrderController::class,'confirmPage'])->name('confirm.order.page')->middleware('verify.api'); //confirmation msg page
+Route::get('/order/all/list',[OrderController::class,'showList'])->name('order.list')->middleware('verify.api'); //show all order of customer
+Route::post('/cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('order.cancel')->middleware('verify.api'); //cancel an order on click
+Route::post('/details/order/{id}',[OrderController::class,'orderDetails'])->name('order.details')->middleware('verify.api'); //show details in individual page
+Route::get('/order/receipt/{id}',[OrderController::class,'downloadReceipt'])->name('receipt.download')->middleware('verify.api');
 
