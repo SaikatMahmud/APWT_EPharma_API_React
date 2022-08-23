@@ -20,6 +20,7 @@ const Reg = () => {
                 localStorage.setItem('_authToken', succ.data.token_key);
                 localStorage.setItem('_authUserId', succ.data.user_id);
                 navigate({ pathname: '/' });
+                window.location.reload();
             }, (err) => {
                 debugger;
                 setErrs(err.response.data);

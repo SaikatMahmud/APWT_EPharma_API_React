@@ -54,3 +54,4 @@ Route::get('/order/receipt/{id}',[OrderController::class,'downloadReceipt'])->na
 
 Route::post('/return/order/{id}',[OrderController::class,'returnOrder'])->name('order.return')->middleware('verify.api'); //cancel an order on click
 Route::post('/review/order',[ReviewController::class,'saveReview'])->name('order.review')->middleware('verify.api'); //cancel an order on click
+Route::post('/expense/history',[OrderController::class,'orderHistory'])->name('order.review')->middleware('verify.api'); //cancel an order on click

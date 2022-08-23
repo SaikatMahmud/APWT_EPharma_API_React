@@ -15,6 +15,7 @@ import OrderDetails from "./customer/OrderDetails";
 import OrderConfirmPage from "./customer/OrderConfirmPage";
 import MedicineDetails from "./customer/MedicineDetails";
 import AddReview from "./customer/AddReview";
+import ExpenseHistory from "./customer/ExpenseHistory";
 import { useState, useEffect } from "react";
 
 const Main = () => {
@@ -49,6 +50,7 @@ const Main = () => {
                     <Route path="/logout" element={<Logout />} />
 
                     <Route path="/order_review" element={<AddReview/>} />
+                    <Route path="/expense/history" element={<ExpenseHistory/>} />
 
                 </Routes>
             </BrowserRouter>

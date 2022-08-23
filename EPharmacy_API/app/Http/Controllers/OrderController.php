@@ -7,6 +7,8 @@ use App\Models\EPCart;
 use App\Models\EPCustomer;
 use App\Models\EPMedicine;
 use App\Models\EPOrder;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -21,7 +23,7 @@ class OrderController extends Controller
 
     public function confirmOrder(Request $rq)
     {
-        $validator=Validator::make(
+        $validator = Validator::make(
             $rq->all(),
             [
                 //"quantity" => "required|integer|max:$rq->orgQuantity",
@@ -69,14 +71,14 @@ class OrderController extends Controller
     public function showList(Request $rq)
     { //show all order of a customer
         $list = EPOrder::where('c_id', $rq->header("UserID"))->orderBy('created_at', 'DESC')
-        ->paginate(8)->withQueryString();
+            ->paginate(8)->withQueryString();
         return response()->json($list);
         // return view('customer.orderList')->with('orders', $list);
     }
 
     public function cancelOrder($id)
     {
-        $ord= EPOrder::where('order_id', $id)->update(['status' => "Canceled"]);
+        $ord = EPOrder::where('order_id', $id)->update(['status' => "Canceled"]);
         return redirect()->route('order.list');
     }
     public function returnOrder($id)
@@ -102,8 +104,87 @@ class OrderController extends Controller
         $dompdf->loadHtml(view('customer.downloadOrder')->with('order', $details));
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-        $dompdf->stream('order_receipt.pdf',['Attachment'=>true]);
+        $dompdf->stream('order_receipt.pdf', ['Attachment' => true]);
         //return response()->download(public_path($dompdf));
         return response()->download(public_path($dompdf));
+    }
+
+
+
+    public function orderHistory(Request $rq)
+    {
+        $orderCount = EPOrder::where('c_id', $rq->header("UserID"))->count();
+        $orderAmountInTotal = EPOrder::where('c_id', $rq->header("UserID"))
+            ->where('status', '!=', 'Canceled')
+            ->where('status', '!=', 'Returned')->sum('amount');
+
+        $orderInPreviousMonth = EPOrder::where('c_id', $rq->header("UserID"))
+            ->where('status', '!=', 'Canceled')
+            ->where('status', '!=', 'Returned')->whereMonth('created_at', Carbon::now()->month - 1)->get();
+        $orderCountInPreviousMonth = $orderInPreviousMonth->count();
+        $orderAmountInPreviousMonth = $orderInPreviousMonth->sum('amount');
+
+        $orderInThisMonth = EPOrder::where('c_id', $rq->header("UserID"))
+            ->where('status', '!=', 'Canceled')
+            ->where('status', '!=', 'Returned')->whereMonth('created_at', Carbon::now()->month)->get();
+        $orderCountInThisMonth = $orderInThisMonth->count();
+        $orderAmountInThisMonth = $orderInThisMonth->sum('amount');
+        //    for ($i =1; $i <=12;$i++){
+        //     $testing[]=EPOrder::where('c_id', $rq->header("UserID"))->whereMonth('created_at',$i)->get();
+        //    }
+        //    $period=[];
+        //     for ($i =0; $i <= 12; $i++) {
+        //         array_push($period, array(
+        //             'month' => Carbon::now()->,
+        //             'amount' => 0
+        //         ));
+        //     }
+
+        $allMonth = array();
+        for ($i = 12; $i >= 1; $i--) {
+            $month = Carbon::today()->startOfYear()->subMonth($i);
+            //$year = Carbon::today()->startOfMonth()->subMonth($i)->format('Y');
+            array_push($allMonth, array(
+                'month' => $month->format('F'),
+                'amount' => 0
+            ));
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        $dataCurrentYear = EPOrder::where('c_id', $rq->header("UserID"))
+            ->where('status', '!=', 'Canceled')
+            ->where('status', '!=', 'Returned')
+            ->whereYear('created_at', Carbon::now()->year)->selectRaw("monthname(created_at) as month, sum(amount) as amount")
+            ->groupBy('month')->get()->toArray();
+        $allMonth = array_column($allMonth, null, "month");
+        $dataCurrentYear = array_column($dataCurrentYear, null, "month");
+        $dataCurrentYear = array_values(array_replace($allMonth, $dataCurrentYear));
+        /////////////////////////////////////////////////////////////////////////////////
+        $dataPreviousYear = EPOrder::where('c_id', $rq->header("UserID"))
+        ->where('status', '!=', 'Canceled')
+        ->where('status', '!=', 'Returned')->whereYear('created_at', Carbon::now()->year - 1)->selectRaw("monthname(created_at) as month, sum(amount) as amount")
+            ->groupBy('month')->get()->toArray();
+        $allMonth = array_column($allMonth, null, "month");
+        $dataPreviousYear = array_column($dataPreviousYear, null, "month");
+        $dataPreviousYear = array_values(array_replace($allMonth, $dataPreviousYear));
+        ////////////////////////////////////////////////////////////////////////////////
+        // $print =array_merge($testing,$data);
+        // $merged = collect($print)->unique('month');
+        // $print= $testing->merge($data)->sortBy('month');
+        // $print = array_replace_recursive($data,$testing);
+        // $print=array( array_unique(array_merge($data,$testing)));
+        //  $print =$data+$testing;
+
+        return response()->json([
+            "count" => $orderCount,
+            "totalAmount" => $orderAmountInTotal,
+            "countInPreviousM" => $orderCountInPreviousMonth,
+            "amountInPreviousM" => $orderAmountInPreviousMonth,
+            "countInThisM" => $orderCountInThisMonth,
+            "amountInThisM" => $orderAmountInThisMonth,
+            "dataCurrentYear" => $dataCurrentYear,
+            "dataPreviousYear" => $dataPreviousYear
+        ]);
+        // return response()->json(["test" => $dataCurrentMonth]);
     }
 }

@@ -10,6 +10,8 @@ const Logout=()=>{
         axiosConfig.get("/logout").then((rsp) => {
           localStorage.removeItem('_authToken');
           navigate({ pathname: '/' });
+          window.location.reload();
+
         }, (err) => {
             debugger
         })
