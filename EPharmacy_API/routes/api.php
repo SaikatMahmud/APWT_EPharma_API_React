@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,3 +51,6 @@ Route::post('/cancel/order/{id}',[OrderController::class,'cancelOrder'])->name('
 Route::post('/details/order/{id}',[OrderController::class,'orderDetails'])->name('order.details')->middleware('verify.api'); //show details in individual page
 Route::get('/order/receipt/{id}',[OrderController::class,'downloadReceipt'])->name('receipt.download')->middleware('verify.api');
 
+
+Route::post('/return/order/{id}',[OrderController::class,'returnOrder'])->name('order.return')->middleware('verify.api'); //cancel an order on click
+Route::post('/review/order',[ReviewController::class,'saveReview'])->name('order.review')->middleware('verify.api'); //cancel an order on click

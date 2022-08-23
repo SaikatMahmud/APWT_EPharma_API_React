@@ -14,6 +14,7 @@ import Logout from "./customer/Logout";
 import OrderDetails from "./customer/OrderDetails";
 import OrderConfirmPage from "./customer/OrderConfirmPage";
 import MedicineDetails from "./customer/MedicineDetails";
+import AddReview from "./customer/AddReview";
 import { useState, useEffect } from "react";
 
 const Main = () => {
@@ -46,6 +47,9 @@ const Main = () => {
                     <Route path="/details/order/:id" element={<OrderDetails />} />
                     <Route path="/medicine/details/:id" element={<MedicineDetails />} />
                     <Route path="/logout" element={<Logout />} />
+
+                    <Route path="/order_review" element={<AddReview/>} />
+
                 </Routes>
             </BrowserRouter>
 

@@ -69,14 +69,19 @@ class OrderController extends Controller
     public function showList(Request $rq)
     { //show all order of a customer
         $list = EPOrder::where('c_id', $rq->header("UserID"))->orderBy('created_at', 'DESC')
-        ->paginate(4)->withQueryString();
+        ->paginate(8)->withQueryString();
         return response()->json($list);
         // return view('customer.orderList')->with('orders', $list);
     }
 
     public function cancelOrder($id)
     {
-        EPOrder::where('order_id', $id)->update(['status' => "Canceled"]);
+        $ord= EPOrder::where('order_id', $id)->update(['status' => "Canceled"]);
+        return redirect()->route('order.list');
+    }
+    public function returnOrder($id)
+    {
+        EPOrder::where('order_id', $id)->update(['status' => "Picking up"]);
         return redirect()->route('order.list');
     }
 

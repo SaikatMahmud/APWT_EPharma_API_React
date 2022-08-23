@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination";
 import { saveAs } from "file-saver";
 import fileDownload from "js-file-download";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 
 const Orders = () => {
@@ -16,6 +17,10 @@ const Orders = () => {
   const [method, setMethod] = useState("");
   const [errs, setErrs] = useState({});
   const [msgRemove, setRemove] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
   var subTotal = 0;
 
   useEffect(() => {
@@ -40,8 +45,25 @@ const Orders = () => {
 
     })
   }
+  const returnOrder = (id) => {
+    axiosConfig.post(`/return/order/${id}`).then((rsp) => {
+      debugger
+      setResult(rsp.data);
+      setRemove("Return request placed");
+    }, (err) => {
+      setErrs(err.response.data);
+
+    })
+  }
+  const addReview = (order_id, order_amount) => {
+    navigate('/order_review',
+      {state:{o_id:order_id,o_amount:order_amount}}
+    );
+    
+
+  }
   const downloadOrder = (id) => {
-    axiosConfig.get(`/order/receipt/${id}`,{responseType: 'blob'}).then((rsp) => {
+    axiosConfig.get(`/order/receipt/${id}`, { responseType: 'blob' }).then((rsp) => {
       debugger
       // saveAs(rsp.blob,'order_recipt.pdf');
       fileDownload(rsp.data, 'order_recipt.pdf');
@@ -88,7 +110,7 @@ const Orders = () => {
   }
   return (
     <div>
-      
+      <span><br/><h4 align="center">{location.state ? location.state.msgFromReview : ''}</h4></span>
       <h3 align="center">Your order list</h3>
       <table border="1" align="center" cellpadding="4" width="43%" >
         <tr >
@@ -111,6 +133,15 @@ const Orders = () => {
                   order.status == 'Pending' && <span><button onClick={() => cancelOrder(order.order_id)}>Cancel</button> | </span>
                 }
                 <button onClick={() => downloadOrder(order.order_id)}>Download</button>
+                {
+                  order.status == 'Delivered' && <span> | <button onClick={() => returnOrder(order.order_id)}>Return</button></span>
+                }
+                {
+                  (order.status != 'Pending') && (order.status != 'Canceled') && (order.review_status!='true') && <span> | <button onClick={() => addReview(order.order_id, order.amount)}>Review</button></span>
+                }
+                {
+                  (order.status != 'Pending') && (order.status != 'Canceled') && (order.review_status=='true') && <span> | Reviewed</span>
+                }
               </td>
 
             </tbody>
@@ -118,7 +149,7 @@ const Orders = () => {
         }
       </table>
       <div align="center">
-        
+
         <Pagination
           activePage={result.current_page}
           itemsCountPerPage={result.per_page}
