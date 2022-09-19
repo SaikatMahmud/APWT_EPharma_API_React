@@ -42,7 +42,7 @@ const AddReview = () => {
         <div align='center'><br />
             Add a review for your order <b>#{location.state.o_id}</b><br />Order amount TK {location.state.o_amount}<br /><br />
             <form onSubmit={saveReview}>
-                Rate your order: <div onChange={(e) => setOrderRating(e.target.value)}>
+                Rate your order:* <div onChange={(e) => setOrderRating(e.target.value)}>
                     <input type="radio" value="5" name="rating" /> 5 &emsp;
                     <input type="radio" value="4" name="rating" /> 4 &emsp;
                     <input type="radio" value="3" name="rating" /> 3 &emsp;
