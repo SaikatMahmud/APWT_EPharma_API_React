@@ -1,4 +1,4 @@
-<b>Screenshots -</b>
+<h3>Screenshots -</h3>
 ![homepage](https://user-images.githubusercontent.com/65038036/221236016-aaa5b990-0b03-4fee-980b-73a9cad2b311.PNG)
 ![search_page](https://user-images.githubusercontent.com/65038036/221236045-a66041ad-7a1d-4b9a-9a0b-113149253d04.PNG)
 ![added_to_cart](https://user-images.githubusercontent.com/65038036/221236102-eae7608b-5cdb-4d45-8dc7-d5c9ea61c6c8.PNG)
