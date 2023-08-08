@@ -1,3 +1,14 @@
+Implemented Laravel API, JWT and ReactJs. Have done the customer part only. <br/>
+Some features include:
+- Customer login/Reg
+- Edit profile, profile pic
+- Search medicines
+- Edit/delete cart
+- Place orders
+- Order details/review/rating/cancellation/return
+- PDF invoice
+- Expense history, order statistics
+<br/>
 <b>############## Screenshots ##############</b><br/><br/>
 ![homepage](https://user-images.githubusercontent.com/65038036/221236016-aaa5b990-0b03-4fee-980b-73a9cad2b311.PNG)
 ![search_page](https://user-images.githubusercontent.com/65038036/221236045-a66041ad-7a1d-4b9a-9a0b-113149253d04.PNG)
