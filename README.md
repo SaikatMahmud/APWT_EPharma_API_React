@@ -1,5 +1,4 @@
-Implemented Laravel API, JWT and ReactJs. Have done the customer part only. <br/>
-Some features include:
+Implemented features include:
 - Customer login/Reg
 - Edit profile, profile pic
 - Search medicines
